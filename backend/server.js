@@ -13,7 +13,7 @@ const dotenv = require('dotenv')
 dotenv.config()
 
 // MIDDLEWARE MOSTLY FOR GETTING THE FORM DATA FROM THE LOGIN AND SIGNUP PAGES
-app.use(express.static('../frontend/public'))
+app.use(express.static('./public'))
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 app.use(bodyParser.json())
