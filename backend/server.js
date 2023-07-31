@@ -139,71 +139,65 @@ app.post('/create/:id', async (req, res)=> {
 
     let newtask = new newTask({name, title, datetime, description})
     newtask.save()
-    .then(res.redirect(`https://remind-me-app-ochre.vercel.app/tasks/${id}`))
-    .then(theRealDeal())
-})
-
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-    user: 'reminders.remindme@gmail.com',
-    pass: 'beaozarhzyrcaozg'
-  }
-})
-
-// SENDING THE REMINDER VIA EMAIL
-const theRealDeal = () => {
-    let allTasks;
-    let allUsers;
-    newTask.find()
-        .then((tasks)=> {
-            allTasks = tasks
-            newUser.find()
-            .then((user)=> {
-                allUsers= user
-            })
-            .then (()=>{
-                for(let i = 0; i < allTasks.length; i++) {
-                    let email;
-                    for(let j = 0; j < allUsers.length; j++) {
-                        if(allTasks[i].name === allUsers[j].username) {
-                            email = allUsers[j].email
-                        }
-                    }
-                    const myDate = new Date(allTasks[i].datetime)
-                    const title = allTasks[i].title
-                    const name = allTasks[i].name
-                    const description = allTasks[i].description
-    
-                    const mailOptions = {
-                        from: 'reminders.remindme@gmail.com',
-                        to: email,
-                        subject: `Reminder: ${title}`,
-                        html: `
-                        <div>
-                            <h1>${title}</h1>
-                            <h3>Hallo ${name},</h3>
-                            <p>This is just to remind you to perform the following task right now⌚: </p>
-                            <p><strong>${title}</strong></p>
-                            <p>Description: ${description}</p>
-                            <br/>
-                            <br />
-                            <p>Best regards,</p> 
-                            <p>RemindMe Team</p>
-                        </div>`
-                    }
-                    nodeschedule.scheduleJob(myDate, () => {
-                        transporter.sendMail(mailOptions, function(error, info){
-                            if (error) {
-                            console.log(error);
-                            } else {
-                                console.log('Email sent: ' + info.response);
-                            }
-                            })
-                    })                 
-                }
-            })
+    .then(()=> {
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+            user: 'reminders.remindme@gmail.com',
+            pass: 'beaozarhzyrcaozg'
+          }
         })
-}
-
-    
+        let allTasks;
+        let allUsers;
+        newTask.find()
+            .then((tasks)=> {
+                allTasks = tasks
+                newUser.find()
+                .then((user)=> {
+                    allUsers= user
+                })
+                .then (()=>{
+                    for(let i = 0; i < allTasks.length; i++) {
+                        let email;
+                        for(let j = 0; j < allUsers.length; j++) {
+                            if(allTasks[i].name === allUsers[j].username) {
+                                email = allUsers[j].email
+                            }
+                        }
+                        const myDate = new Date(allTasks[i].datetime)
+                        const title = allTasks[i].title
+                        const name = allTasks[i].name
+                        const description = allTasks[i].description
+        
+                        const mailOptions = {
+                            from: 'reminders.remindme@gmail.com',
+                            to: email,
+                            subject: `Reminder: ${title}`,
+                            html: `
+                            <div>
+                                <h1>${title}</h1>
+                                <h3>Hallo ${name},</h3>
+                                <p>This is just to remind you to perform the following task right now⌚: </p>
+                                <p><strong>${title}</strong></p>
+                                <p>Description: ${description}</p>
+                                <br/>
+                                <br />
+                                <p>Best regards,</p> 
+                                <p>RemindMe Team</p>
+                            </div>`
+                        }
+                        nodeschedule.scheduleJob(myDate, () => {
+                            transporter.sendMail(mailOptions, function(error, info){
+                                if (error) {
+                                console.log(error);
+                                } else {
+                                    console.log('Email sent: ' + info.response);
+                                }
+                                })
+                        })                 
+                    }
+                })
+            })
+    })
+    .then(res.redirect(`https://remind-me-app-ochre.vercel.app/tasks/${id}`))
+})
