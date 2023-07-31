@@ -85,7 +85,7 @@ app.get('/users/:id', async (req, res) => {
 
 // SEND TASKS TO FRONTEND
 app.get('/tasks', (req, res) => {  
-    theRealDeal()  
+      
     newTask.find()
         .then((tasks)=> {
             res.status(200).json(tasks)
@@ -140,6 +140,7 @@ app.post('/create/:id', async (req, res)=> {
     let newtask = new newTask({name, title, datetime, description})
     newtask.save()
     .then(res.redirect(`https://remind-me-app-ochre.vercel.app/tasks/${id}`))
+    .then(theRealDeal())
 })
 
 const transporter = nodemailer.createTransport({
