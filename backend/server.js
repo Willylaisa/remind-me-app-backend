@@ -64,7 +64,7 @@ app.post('/login', (req, res) => {
             for (let i = 0; i < secretInfo.length; i++) {
                 if (secretInfo[i].email === email && secretInfo[i].password === password) {
                     const id = secretInfo[i]._id
-                    return res.redirect(`https://remind-me-app.onrender.com/tasks/${id}`)
+                    return res.redirect(`https://remind-me-app-ochre.vercel.app/tasks/${id}`)
                 }                
             }
             res.send('<h1>Error: Email and password don\'t match</h1> <h3>Please go back and sign up if you do not have an account</h3>')
@@ -106,7 +106,7 @@ app.post('/signup', (req, res)=> {
         let newuser = new newUser({username, email, password})
         const id = newuser._id
         newuser.save()
-        .then(res.redirect(`https://remind-me-app.onrender.com/tasks/${id}`))
+        .then(res.redirect(`https://remind-me-app-ochre.vercel.app/tasks/${id}`))
     }
     else {
         res.send('<h1>Passwords do not match!</h1> <h3>Please go back and sign up again<h3>')
@@ -139,7 +139,7 @@ app.post('/create/:id', async (req, res)=> {
 
     let newtask = new newTask({name, title, datetime, description})
     newtask.save()
-    .then(res.redirect(`https://remind-me-app.onrender.com/tasks/${id}`))
+    .then(res.redirect(`https://remind-me-app-ochre.vercel.app/tasks/${id}`))
 })
 
 const transporter = nodemailer.createTransport({
